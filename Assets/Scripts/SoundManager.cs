@@ -7,8 +7,13 @@ public class SoundManager : MonoBehaviour
 {
     public static SoundManager instance;
 
-    [Range(0, 100)]
-    public int volume; // BGM º¼·ý
+    int volume; // BGM º¼·ý
+
+    public int Volume
+    { 
+        get { return volume; }
+        set { volume = value; }
+    }
 
     void Awake()
     {
@@ -16,6 +21,8 @@ public class SoundManager : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(this.gameObject);
+
+            volume = 50;
         }
         else
         {
@@ -25,7 +32,7 @@ public class SoundManager : MonoBehaviour
 
     void Start()
     {
-        
+
     }
 
     void Update()

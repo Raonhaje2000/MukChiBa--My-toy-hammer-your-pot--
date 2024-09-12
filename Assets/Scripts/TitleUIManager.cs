@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using UnityEngine.SceneManagement;
 
 // 게임 타이틀 UI와 관련된 부분을 처리하는 클래스
 public class TitleUIManager : MonoBehaviour
@@ -22,6 +24,11 @@ public class TitleUIManager : MonoBehaviour
     // 사운드 아이콘 이미지 (0: 최소 ~ 2: 최대)
     [SerializeField] Sprite[] soundIconImages = new Sprite[3];
 
+    // 사운드 바 관련
+    [SerializeField] GameObject soundBarObject;
+    [SerializeField] Slider soundBar;
+    [SerializeField] TextMeshProUGUI soundBarText;
+
     void Awake()
     {
         if (instance == null)
@@ -36,11 +43,15 @@ public class TitleUIManager : MonoBehaviour
 
     void Start()
     {
-        AddButtonListener(); // 버튼 리스너 추가
+        AddListeners(); // 버튼 리스너 추가
+
+        soundBarObject.SetActive(false);
+
+        SetSoundUI(SoundManager.instance.Volume);
     }
 
-    // 버튼 리스너 추가
-    void AddButtonListener()
+    // 리스너 추가
+    void AddListeners()
     {
         soundButton.onClick.AddListener(ClickSoundButtonButton);
 
@@ -48,25 +59,21 @@ public class TitleUIManager : MonoBehaviour
         recordButton.onClick.AddListener(ClickRecordButton);
         howToPlayButton.onClick.AddListener(ClickHowToPlayButton);
         quitButton.onClick.AddListener(ClickQuitButton);
+
+        soundBar.onValueChanged.AddListener(ChangeSoundBarValue);
     }
 
-    void Update()
-    {
-        // 테스트용 (후에 슬라이드바 내용으로 변경)
-        int index = (SoundManager.instance.volume + 49) / 50;
-
-        soundButtonIcon.sprite = soundIconImages[index];
-    }
-
+    // 사운드 버튼 클릭
     void ClickSoundButtonButton()
     {
-        // 클릭시 슬라이드바 나오게
+        soundBarObject.SetActive(!soundBarObject.activeSelf);
     }
 
     // 게임 시작 버튼 클릭
     void ClickStartButton()
     {
-
+        GameManager.instance.ChanageGameState(GameManager.State.Game);
+        SceneManager.LoadScene("GameScene");
     }
 
     // 게임 기록 버튼 클릭
@@ -85,5 +92,31 @@ public class TitleUIManager : MonoBehaviour
     void ClickQuitButton()
     {
         Application.Quit();
+    }
+
+    // 사운드 바 값 변경
+    void ChangeSoundBarValue(float currentValue)
+    {
+        int volume = Mathf.RoundToInt(currentValue);
+
+        // 사운드 UI 설정
+        SetSoundUI(volume);
+
+        SoundManager.instance.Volume = volume;
+    }
+
+    // 사운드 UI 설정
+    void SetSoundUI(int currentVolume)
+    {
+        // 버튼 아이콘 변경
+        int index = (currentVolume + 49) / 50;
+
+        soundButtonIcon.sprite = soundIconImages[index];
+
+        // 바 값 변경
+        soundBar.value = currentVolume;
+
+        // 텍스트 변경
+        soundBarText.text = currentVolume.ToString();
     }
 }
