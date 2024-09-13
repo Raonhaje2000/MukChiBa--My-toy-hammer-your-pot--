@@ -31,7 +31,7 @@ public class GameUIManager : MonoBehaviour
     [SerializeField] Image characterImage;
 
     // 제한 시간
-    [SerializeField] Slider TimerBar;
+    [SerializeField] Slider timerBar;
 
     // 공격 방어 버튼
     [SerializeField] Button attackButton;
@@ -47,11 +47,15 @@ public class GameUIManager : MonoBehaviour
     [SerializeField] Sprite chiImage;
     [SerializeField] Sprite baImage;
 
+    Character characterComponent;
+
     void Awake()
     {
         if (instance == null)
         {
             instance = this;
+
+            characterComponent = gameObject.GetComponent<Character>();
         }
         else
         {
@@ -61,17 +65,35 @@ public class GameUIManager : MonoBehaviour
 
     void Start()
     {
-        AddListeners();
+        AddListeners(); // 리스너 추가
+
+        Initialize(); // 초기화
     }
 
+    // 초기화
+    void Initialize()
+    {
+        InitializeSelectionImage();
+
+        characterImage.sprite = characterComponent.ReturnImage(Character.State.Initial);
+    }
+
+    // 리스너 추가
     void AddListeners()
     {
+        pauseButton.onClick.AddListener(ClickPauseButton);
+
         attackButton.onClick.AddListener(ClickAttackButton);
         defenceButton.onClick.AddListener(ClickDefenceButton);
 
         mukButton.onClick.AddListener(ClickMukButton);
         chiButton.onClick.AddListener(ClickChiButton);
         baButton.onClick.AddListener(ClickBaButton);
+    }
+
+    void ClickPauseButton()
+    {
+
     }
 
     void ClickAttackButton()
@@ -87,16 +109,22 @@ public class GameUIManager : MonoBehaviour
     void ClickMukButton()
     {
         playerSelectionImage.sprite = mukImage;
+
+        GameManager.instance.ChangePlayerSelection(GameManager.MukChiBa.Muk);
     }
 
     void ClickChiButton()
     {
         playerSelectionImage.sprite = chiImage;
+
+        GameManager.instance.ChangePlayerSelection(GameManager.MukChiBa.Chi);
     }
 
     void ClickBaButton()
     {
         playerSelectionImage.sprite = baImage;
+
+        GameManager.instance.ChangePlayerSelection(GameManager.MukChiBa.Ba);
     }
 
     // 전체 플레이 시간 텍스트 업데이트
@@ -106,5 +134,81 @@ public class GameUIManager : MonoBehaviour
         int sec = Mathf.FloorToInt(time % 60.0f);
 
         playTimeText.text = min.ToString("00") + ":" + sec.ToString("00");
+    }
+
+    // 캐릭터 이미지 변경
+    public void ChanageCharacterImage(Character.State state)
+    {
+        characterImage.sprite = characterComponent.ReturnImage(state);
+    }
+
+    // 제한 시간 바 업데이트
+    public void UpdateTimerBar(float maxTime, float currentTime)
+    {
+        timerBar.maxValue = maxTime;
+        timerBar.minValue = 0.0f;
+
+        timerBar.value = currentTime;
+    }
+
+    // 컴퓨터 선택 이미지 변경
+    public void ChangeComputerSelectionImage(GameManager.MukChiBa selection)
+    {
+        switch (selection) 
+        {
+            case GameManager.MukChiBa.Muk:
+                {
+                    computerSelectionImage.sprite = mukImage;
+                    break;
+                }
+            case GameManager.MukChiBa.Chi:
+                {
+                    computerSelectionImage.sprite = chiImage;
+                    break;
+                }
+            case GameManager.MukChiBa.Ba:
+                {
+                    computerSelectionImage.sprite = baImage;
+                    break;
+                }
+        }
+    }
+
+    // 체력 이미지 변경
+    public void ChangeHpImage(int playerHp, int computerHp)
+    {
+        // 플레이어 체력 이미지 변경
+        for(int i = 0; i < playerHpImage.Length; i++)
+        {
+            
+        }
+
+        // 컴퓨터 체력 이미지 변경
+        for(int i = 0; i < computerHpImage.Length; i++)
+        {
+
+        }
+    }
+
+    // 공격 버튼 활성 상태 변경
+    public void ActiveAttackDefenceButton(bool active)
+    {
+        attackButton.interactable = active;
+        defenceButton.interactable = active;
+    }
+
+    // 묵찌빠 버튼 활성 상태 변경
+    public void ActiveMukChiBaButton(bool active)
+    {
+        mukButton.interactable = active;
+        chiButton.interactable = active;
+        baButton.interactable = active;
+    }
+
+    // 선택 이미지 초기화
+    public void InitializeSelectionImage()
+    {
+        playerSelectionImage.sprite = null;
+        computerSelectionImage.sprite = null;
     }
 }

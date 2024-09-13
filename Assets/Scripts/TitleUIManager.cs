@@ -72,7 +72,6 @@ public class TitleUIManager : MonoBehaviour
     // 게임 시작 버튼 클릭
     void ClickStartButton()
     {
-        GameManager.instance.ChanageGameState(GameManager.State.Game);
         SceneManager.LoadScene("GameScene");
     }
 

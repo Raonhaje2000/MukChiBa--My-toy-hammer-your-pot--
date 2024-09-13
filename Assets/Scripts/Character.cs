@@ -16,8 +16,7 @@ public class Character : MonoBehaviour
         Lose
     }
 
-    public static Character instance;
-
+    // 캐릭터 이미지
     [SerializeField] Sprite initialImage;
     [SerializeField] Sprite notSelectImage;
     [SerializeField] Sprite attackFailureImage;
@@ -27,18 +26,7 @@ public class Character : MonoBehaviour
     [SerializeField] Sprite winImage;
     [SerializeField] Sprite loseImage;
 
-    void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
+    // 상태에 맞는 캐릭터 이미지 반환
     public Sprite ReturnImage(State characterState)
     {
         switch (characterState)
