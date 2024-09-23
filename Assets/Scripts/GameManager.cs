@@ -12,23 +12,23 @@ public class GameManager : MonoBehaviour
     const float DECREASE_LIMIT_TIME = 0.4f; // 판 당 감소하는 시간의 한계치
     const float ATK_DEF_TIME = 0.4f;        // 공격 또는 방어 제한 시간
 
-    public enum MukChiBa { None = -1, Muk = 0, Chi = 1, Ba = 2 } // 묵찌빠
-    public enum Result { Win = 1, Draw = 0, Lose = -1 }
+    public enum MukChiBa { None = -1, Muk = 0, Chi = 1, Ba = 2 } // 묵찌빠 선택
+    public enum Result { Win = 1, Draw = 0, Lose = -1 } // 묵찌빠 결과
 
     public static GameManager instance;
 
     // 현재 체력
-    int playerCurrentHp;
-    int computerCurrentHp;
+    [SerializeField] int playerCurrentHp;
+    [SerializeField] int computerCurrentHp;
 
     float playTime;    // 전체 플레이 시간
 
     [SerializeField] int count;         // 한 판에서 묵찌빠를 낸 횟수 (컴퓨터가 낸 횟수라고 생각하면 편함)
 
-    [SerializeField] float maxTime;         // 최대 제한 시간
+    float maxTime;         // 최대 제한 시간
     float remainingTime;   // 남은 제한 시간
 
-    bool isAttacker;   // 플레이어의 공격권 여부
+    [SerializeField] bool isAttacker;   // 플레이어의 공격권 여부
 
     // 묵찌빠 중 선택한 것
     [SerializeField] MukChiBa playerSelection;
@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
     {
         Initialize(); // 초기화
 
-        PlayGame(); // 게임 시작
+        StartGame(); // 게임 시작
     }
 
     void Update()
@@ -76,12 +76,12 @@ public class GameManager : MonoBehaviour
     }
 
     // 게임 시작
-    public void PlayGame()
+    public void StartGame()
     {
         playTime = 0.0f;
 
         StartCoroutine(UpdatePlayTime()); // 전체 플레이 시간 업데이트
-        StartCoroutine(DoRockPaperScissors()); // 가위바위보로 첫 판 시작
+        StartCoroutine(PlayGame()); // 게임 진행
     }
 
     // 전체 플레이 시간 변경
@@ -113,50 +113,55 @@ public class GameManager : MonoBehaviour
         GameUIManager.instance.ChangeComputerSelectionImage(computerSelection);
     }
 
-    // 가위바위보로 첫 판 시작
-    // 가위바위보 테스트 중 ###############
-    IEnumerator DoRockPaperScissors()
+    // 게임 진행
+    IEnumerator PlayGame()
     {
+        // 플레이어와 컴퓨터의 체력이 모두 남아있을때만 게임 진행
         while (true)
         {
-            // 대기 시간
-            yield return new WaitForSecondsRealtime(2.0f);
-
             // 초기화
-            maxTime = INIT_TIME - count * DECREASE_TIME;
-            if (maxTime < DECREASE_LIMIT_TIME) maxTime = DECREASE_LIMIT_TIME;
-
-            remainingTime = maxTime;
-
             isAttacker = false;
+            count = 0;
 
-            playerSelection = MukChiBa.None;
-            computerSelection = MukChiBa.None;
+            // 가위바위보 진행 (가위바위보로 시작)
+            yield return DoRockPaperScissors();
 
-            GameUIManager.instance.InitializeSelectionImage();
+            if (playerCurrentHp == 0) break;
 
-            GameUIManager.instance.ChanageCharacterImage(Character.State.Initial);
+            // 묵찌빠 진행
+            yield return DoMukChiBa();
 
-            // 버튼 활성화 설정
-            GameUIManager.instance.ActiveAttackDefenceButton(false);
-            GameUIManager.instance.ActiveMukChiBaButton(true);
+            // 공격 방어 진행
+            Debug.Log("공격 방어 진행");
+
+            if (playerCurrentHp == 0 || computerCurrentHp == 0) break;
+        }
+
+        // 체력 관련 승패 처리
+    }
+
+    // 가위바위보 진행
+    IEnumerator DoRockPaperScissors()
+    {
+        // 승패가 결정나기 전까지 계속 가위바위보 진행
+        while (true)
+        {
+            // 2초 대기
+            yield return new WaitForSeconds(2.0f);
+
+            // 게임 설정 초기화
+            InitializeGameOptions();
 
             // 남은 제한 시간 업데이트
-            while (remainingTime > 0.0f)
-            {
-                remainingTime -= Time.deltaTime;
+            yield return UpdateRemainingTime();
 
-                GameUIManager.instance.UpdateTimerBar(maxTime, remainingTime);
-
-                yield return null;
-            }
+            // 현재 진행한 판수 증가
+            count++;
 
             // 버튼 활성화 설정
             GameUIManager.instance.ActiveMukChiBaButton(false);
 
-            count++;
-
-            // 컴퓨터 설정 화면에 보이기
+            // 컴퓨터 선택 화면에 보이기
             ChangeComputerSelection();
 
             // 결과 처리
@@ -168,17 +173,113 @@ public class GameManager : MonoBehaviour
                 playerCurrentHp--;
                 GameUIManager.instance.ChangeHpImage(playerCurrentHp, computerCurrentHp);
 
-                // 플레이어 체력이 0이 되었을 경우 플레이어 패배
-                if (playerCurrentHp == 0) GameUIManager.instance.ChanageCharacterImage(Character.State.Lose);
+                // 플레이어 체력이 0이 되었을 경우 가위바위보 종료
+                if (playerCurrentHp == 0) break;
             }
             else // 플레이어가 선택을 한 경우
             {
                 Result result = ReturnResult();
 
-                // 테스트용 ############
-                if (result == Result.Win) GameUIManager.instance.ChanageCharacterImage(Character.State.Win);
-                if (result == Result.Lose) GameUIManager.instance.ChanageCharacterImage(Character.State.Lose);
+                if (result != Result.Draw)
+                {
+                    // 플레이어가 가위바위보에서 이긴 경우 공격권을 가져감
+                    isAttacker = (result == Result.Win) ? true : false;
+
+                    // 묵찌빠 진행
+                    break;
+                }
             }
+
+            // 다음 판으로 넘어간게 아니므로 판수 롤백
+            count--;
+        }
+    }
+
+    // 묵찌빠 진행
+    IEnumerator DoMukChiBa()
+    {
+        while (true)
+        {
+            // 2초 대기
+            yield return new WaitForSeconds(2.0f);
+
+            // 게임 설정 초기화
+            InitializeGameOptions();
+
+            // 남은 제한 시간 업데이트
+            yield return UpdateRemainingTime();
+
+            // 현재 진행한 판수 증가
+            count++;
+
+            // 버튼 활성화 설정
+            GameUIManager.instance.ActiveMukChiBaButton(false);
+
+            // 컴퓨터 선택 화면에 보이기
+            ChangeComputerSelection();
+
+            // 결과 처리
+            if (playerSelection == MukChiBa.None) // 플레이어가 선택을 안 했을 경우
+            {
+                GameUIManager.instance.ChanageCharacterImage(Character.State.NotSelect);
+
+                // 플레이어의 체력 감소
+                playerCurrentHp--;
+                GameUIManager.instance.ChangeHpImage(playerCurrentHp, computerCurrentHp);
+
+                // 플레이어 체력이 0이 되었을 경우 가위바위보 종료
+                if (playerCurrentHp == 0) break;
+            }
+            else // 플레이어가 선택을 한 경우
+            {
+                Result result = ReturnResult();
+
+                if (result != Result.Draw)
+                {
+                    // 플레이어가 이긴 경우 공격권을 가져감
+                    isAttacker = (result == Result.Win) ? true : false;
+                }
+                else
+                {
+                    // 똑같은 걸 낸 경우 공격 방어 진행
+                    break;
+                }
+            }
+        }
+    }
+
+    // 게임 설정 초기화
+    void InitializeGameOptions()
+    {
+        // 제한 시간 초기화
+        maxTime = INIT_TIME - count * DECREASE_TIME;
+        if (maxTime < DECREASE_LIMIT_TIME) maxTime = DECREASE_LIMIT_TIME;
+
+        remainingTime = maxTime;
+
+        // 선택 초기화
+        playerSelection = MukChiBa.None;
+        computerSelection = MukChiBa.None;
+
+        // 화면 이미지 초기화
+        GameUIManager.instance.InitializeSelectionImage();
+        GameUIManager.instance.ChanageCharacterImage(Character.State.Initial);
+
+        // 버튼 활성화 설정
+        GameUIManager.instance.ActiveAttackDefenceButton(false);
+        GameUIManager.instance.ActiveMukChiBaButton(true);
+    }
+
+    // 남은 제한 시간 업데이트
+    IEnumerator UpdateRemainingTime()
+    {
+        while (remainingTime > 0.0f)
+        {
+            remainingTime -= Time.deltaTime;
+
+            GameUIManager.instance.UpdateTimerBar(maxTime, remainingTime);
+
+            yield return null;
         }
     }
 
