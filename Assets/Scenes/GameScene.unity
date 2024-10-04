@@ -1524,11 +1524,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3367ed3e051aac143a39593bf61abaaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerHpImage:
+  playerHpImages:
   - {fileID: 871101391}
   - {fileID: 1147889744}
   - {fileID: 1465164238}
-  computerHpImage:
+  computerHpImages:
   - {fileID: 1926280428}
   - {fileID: 898942745}
   - {fileID: 378326069}
@@ -1545,9 +1545,16 @@ MonoBehaviour:
   mukButton: {fileID: 291851237}
   chiButton: {fileID: 483336446}
   baButton: {fileID: 1952797477}
-  mukImage: {fileID: 21300000, guid: 77d0fa007a11ad94b9c632b56e7d2168, type: 3}
-  chiImage: {fileID: 21300000, guid: 44e723a36691a4a4da20295efb59cba6, type: 3}
-  baImage: {fileID: 21300000, guid: 5bf45e20349922947b3a90f2e10b6940, type: 3}
+  hpSprites:
+  - {fileID: 21300000, guid: eaad7e5724cc3ee4f8557958ed2ce4ca, type: 3}
+  - {fileID: 21300000, guid: 24559c959b810d44fa0bbaded57ad331, type: 3}
+  - {fileID: 21300000, guid: e3dde9b0f9263f746aa6f6934c2dc1ec, type: 3}
+  - {fileID: 21300000, guid: 0994a7840cfc69946b9d4376681d8f12, type: 3}
+  - {fileID: 21300000, guid: 07339aef46e10b7468f931147a541650, type: 3}
+  - {fileID: 21300000, guid: 683b0eab5fe936049bc12e747c725f03, type: 3}
+  mukSprite: {fileID: 21300000, guid: 77d0fa007a11ad94b9c632b56e7d2168, type: 3}
+  chiSprite: {fileID: 21300000, guid: 44e723a36691a4a4da20295efb59cba6, type: 3}
+  baSprite: {fileID: 21300000, guid: 5bf45e20349922947b3a90f2e10b6940, type: 3}
 --- !u!4 &538043975
 Transform:
   m_ObjectHideFlags: 0
@@ -4234,8 +4241,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3af16dcbd5143a744a999621c94bb756, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MAX_HP: 6
+  playerCurrentHp: 0
+  computerCurrentHp: 0
   count: 0
-  maxTime: 0
+  isAttacker: 0
   playerSelection: 0
   computerSelection: 0
 --- !u!1660057539 &9223372036854775807

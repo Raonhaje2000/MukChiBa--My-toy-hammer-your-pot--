@@ -5,7 +5,7 @@ using UnityEngine;
 // 게임 플레이와 관련된 부분들을 처리하는 클래스
 public class GameManager : MonoBehaviour
 {
-    const int MAX_HP = 6; // 최대 체력
+    public int MAX_HP = 6; // 최대 체력
 
     const float INIT_TIME = 3.0f;           // 게임 첫 판 제한 시간
     const float DECREASE_TIME = 0.2f;      // 판 당 감소하는 시간
@@ -63,6 +63,8 @@ public class GameManager : MonoBehaviour
     {
         playerCurrentHp = MAX_HP;
         computerCurrentHp = MAX_HP;
+
+        GameUIManager.instance.ChangeHpImage(playerCurrentHp, computerCurrentHp);
 
         count = 0;
 

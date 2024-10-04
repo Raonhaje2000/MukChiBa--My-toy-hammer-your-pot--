@@ -9,9 +9,9 @@ public class GameUIManager : MonoBehaviour
 {
     public static GameUIManager instance;
 
-    // 체력
-    [SerializeField] Image[] playerHpImage = new Image[3]; // 플레이어 체력
-    [SerializeField] Image[] computerHpImage = new Image[3]; // 컴퓨터 체력
+    // 체력 이미지
+    [SerializeField] Image[] playerHpImages = new Image[3]; // 플레이어 체력
+    [SerializeField] Image[] computerHpImages = new Image[3]; // 컴퓨터 체력
 
     // 전체 플레이 시간 텍스트
     [SerializeField] TextMeshProUGUI playTimeText;
@@ -42,10 +42,13 @@ public class GameUIManager : MonoBehaviour
     [SerializeField] Button chiButton;
     [SerializeField] Button baButton;
 
+    // 체력 이미지
+    [SerializeField] Sprite[] hpSprites = new Sprite[6];
+
     // 묵찌빠 이미지
-    [SerializeField] Sprite mukImage;
-    [SerializeField] Sprite chiImage;
-    [SerializeField] Sprite baImage;
+    [SerializeField] Sprite mukSprite;
+    [SerializeField] Sprite chiSprite;
+    [SerializeField] Sprite baSprite;
 
     Character characterComponent;
 
@@ -108,21 +111,21 @@ public class GameUIManager : MonoBehaviour
 
     void ClickMukButton()
     {
-        playerSelectionImage.sprite = mukImage;
+        playerSelectionImage.sprite = mukSprite;
 
         GameManager.instance.ChangePlayerSelection(GameManager.MukChiBa.Muk);
     }
 
     void ClickChiButton()
     {
-        playerSelectionImage.sprite = chiImage;
+        playerSelectionImage.sprite = chiSprite;
 
         GameManager.instance.ChangePlayerSelection(GameManager.MukChiBa.Chi);
     }
 
     void ClickBaButton()
     {
-        playerSelectionImage.sprite = baImage;
+        playerSelectionImage.sprite = baSprite;
 
         GameManager.instance.ChangePlayerSelection(GameManager.MukChiBa.Ba);
     }
@@ -158,17 +161,17 @@ public class GameUIManager : MonoBehaviour
         {
             case GameManager.MukChiBa.Muk:
                 {
-                    computerSelectionImage.sprite = mukImage;
+                    computerSelectionImage.sprite = mukSprite;
                     break;
                 }
             case GameManager.MukChiBa.Chi:
                 {
-                    computerSelectionImage.sprite = chiImage;
+                    computerSelectionImage.sprite = chiSprite;
                     break;
                 }
             case GameManager.MukChiBa.Ba:
                 {
-                    computerSelectionImage.sprite = baImage;
+                    computerSelectionImage.sprite = baSprite;
                     break;
                 }
         }
@@ -177,16 +180,31 @@ public class GameUIManager : MonoBehaviour
     // 체력 이미지 변경
     public void ChangeHpImage(int playerHp, int computerHp)
     {
+        // 다 차있지 않은 체력 이미지 인덱스
+        // - 체력이 5인 경우 : 3 - 2 - 1 = 0으로 0번째 체력 이미지는 풀 하트가 아님
+        int playerNotFullHpIndex = (GameManager.instance.MAX_HP / 2) - (playerHp / 2) - 1;
+        int computerNotFullHpIndex = (GameManager.instance.MAX_HP / 2) - (computerHp / 2) - 1;
+
         // 플레이어 체력 이미지 변경
-        for(int i = 0; i < playerHpImage.Length; i++)
+        for (int i = playerHpImages.Length - 1; i >= 0; i--)
         {
-            
+            if (i > playerNotFullHpIndex)
+                playerHpImages[i].sprite = hpSprites[i * 2];
+            else if (i == playerNotFullHpIndex && playerHp % 2 != 0) 
+                playerHpImages[i].sprite = hpSprites[i * 2 + 1];
+            else
+                playerHpImages[i].sprite = null;
         }
 
         // 컴퓨터 체력 이미지 변경
-        for(int i = 0; i < computerHpImage.Length; i++)
+        for (int i = computerHpImages.Length - 1; i >= 0; i--)
         {
-
+            if (i > computerNotFullHpIndex)
+                computerHpImages[i].sprite = hpSprites[i * 2];
+            else if (i == computerNotFullHpIndex && computerHp % 2 != 0)
+                computerHpImages[i].sprite = hpSprites[i * 2 + 1];
+            else
+                computerHpImages[i].sprite = null;
         }
     }
 
