@@ -5,15 +5,19 @@ using UnityEngine;
 // 게임 플레이와 관련된 부분들을 처리하는 클래스
 public class GameManager : MonoBehaviour
 {
-    public int MAX_HP = 6; // 최대 체력
+    const int MAX_HP = 6; // 최대 체력
 
-    const float INIT_TIME = 3.0f;           // 게임 첫 판 제한 시간
+    const float INIT_TIME = 2.0f;           // 게임 첫 판 제한 시간
     const float DECREASE_TIME = 0.2f;      // 판 당 감소하는 시간
     const float DECREASE_LIMIT_TIME = 0.4f; // 판 당 감소하는 시간의 한계치
     const float ATK_DEF_TIME = 0.4f;        // 공격 또는 방어 제한 시간
 
+    WaitForSeconds SelectionLatencyTime = new WaitForSeconds(2.0f); // 묵찌빠 선택 이미지를 보여주기 위한 대기 시간
+    WaitForSeconds AtkDefLatencyTime = new WaitForSeconds(3.0f); // 공격 방어 결과 이미지를 보여주기 위한 대기 시간
+
     public enum MukChiBa { None = -1, Muk = 0, Chi = 1, Ba = 2 } // 묵찌빠 선택
     public enum Result { Win = 1, Draw = 0, Lose = -1 } // 묵찌빠 결과
+    public enum AtkDef { Attack = 1, None = 0, Defence = -1 } // 공격 방어
 
     public static GameManager instance;
 
@@ -23,7 +27,7 @@ public class GameManager : MonoBehaviour
 
     float playTime;    // 전체 플레이 시간
 
-    [SerializeField] int count;         // 한 판에서 묵찌빠를 낸 횟수 (컴퓨터가 낸 횟수라고 생각하면 편함)
+    [SerializeField] int count;         // 한 판에서 묵찌빠를 낸 횟수, 횟수에 따라 제한 시간 조절 (컴퓨터가 낸 횟수라고 생각하면 편함)
 
     float maxTime;         // 최대 제한 시간
     float remainingTime;   // 남은 제한 시간
@@ -33,6 +37,14 @@ public class GameManager : MonoBehaviour
     // 묵찌빠 중 선택한 것
     [SerializeField] MukChiBa playerSelection;
     [SerializeField] MukChiBa computerSelection;
+
+    // 공격과 방어 중 선택한 것
+    [SerializeField] AtkDef atkDefSelection;
+
+    public int MaxHp
+    {
+        get { return MAX_HP; }
+    }
 
     void Awake()
     {
@@ -53,11 +65,6 @@ public class GameManager : MonoBehaviour
         StartGame(); // 게임 시작
     }
 
-    void Update()
-    {
-
-    }
-
     // 초기화
     void Initialize()
     {
@@ -75,6 +82,8 @@ public class GameManager : MonoBehaviour
 
         playerSelection = MukChiBa.None;
         computerSelection = MukChiBa.None;
+
+        atkDefSelection = AtkDef.None;
     }
 
     // 게임 시작
@@ -115,6 +124,12 @@ public class GameManager : MonoBehaviour
         GameUIManager.instance.ChangeComputerSelectionImage(computerSelection);
     }
 
+    // 공격 방어 선택 변경
+    public void ChangeAtkDefSelection(AtkDef selection)
+    {
+        atkDefSelection = selection;
+    }
+
     // 게임 진행
     IEnumerator PlayGame()
     {
@@ -133,13 +148,16 @@ public class GameManager : MonoBehaviour
             // 묵찌빠 진행
             yield return DoMukChiBa();
 
+            if (playerCurrentHp == 0) break;
+
             // 공격 방어 진행
-            Debug.Log("공격 방어 진행");
+            yield return DoAttackDefence();
 
             if (playerCurrentHp == 0 || computerCurrentHp == 0) break;
         }
 
-        // 체력 관련 승패 처리
+        // 게임 종료
+        EndGame();
     }
 
     // 가위바위보 진행
@@ -148,9 +166,6 @@ public class GameManager : MonoBehaviour
         // 승패가 결정나기 전까지 계속 가위바위보 진행
         while (true)
         {
-            // 2초 대기
-            yield return new WaitForSeconds(2.0f);
-
             // 게임 설정 초기화
             InitializeGameOptions();
 
@@ -175,12 +190,18 @@ public class GameManager : MonoBehaviour
                 playerCurrentHp--;
                 GameUIManager.instance.ChangeHpImage(playerCurrentHp, computerCurrentHp);
 
+                // 선택 이미지를 보여주는 동안 대기
+                yield return SelectionLatencyTime;
+
                 // 플레이어 체력이 0이 되었을 경우 가위바위보 종료
                 if (playerCurrentHp == 0) break;
             }
             else // 플레이어가 선택을 한 경우
             {
                 Result result = ReturnResult();
+
+                // 선택 이미지를 보여주는 동안 대기
+                yield return SelectionLatencyTime;
 
                 if (result != Result.Draw)
                 {
@@ -202,9 +223,6 @@ public class GameManager : MonoBehaviour
     {
         while (true)
         {
-            // 2초 대기
-            yield return new WaitForSeconds(2.0f);
-
             // 게임 설정 초기화
             InitializeGameOptions();
 
@@ -229,12 +247,18 @@ public class GameManager : MonoBehaviour
                 playerCurrentHp--;
                 GameUIManager.instance.ChangeHpImage(playerCurrentHp, computerCurrentHp);
 
+                // 선택 이미지를 보여주는 동안 대기
+                yield return SelectionLatencyTime;
+
                 // 플레이어 체력이 0이 되었을 경우 가위바위보 종료
                 if (playerCurrentHp == 0) break;
             }
             else // 플레이어가 선택을 한 경우
             {
                 Result result = ReturnResult();
+
+                // 선택 이미지를 보여주는 동안 대기
+                yield return SelectionLatencyTime;
 
                 if (result != Result.Draw)
                 {
@@ -247,6 +271,83 @@ public class GameManager : MonoBehaviour
                     break;
                 }
             }
+        }
+    }
+
+    // 공격 방어 진행
+    IEnumerator DoAttackDefence()
+    {
+        // 제한 시간 초기화
+        maxTime = ATK_DEF_TIME;
+        remainingTime = maxTime;
+
+        // 선택 초기화
+        atkDefSelection = AtkDef.None;
+
+        // 화면 이미지 초기화
+        GameUIManager.instance.InitializeSelectionImage();
+        GameUIManager.instance.ChanageCharacterImage(Character.State.Initial);
+
+        // 버튼 활성화 설정
+        GameUIManager.instance.ActiveAttackDefenceButton(true);
+        GameUIManager.instance.ActiveMukChiBaButton(false);
+
+        // 남은 제한 시간 업데이트
+        yield return UpdateRemainingTime();
+
+        // 버튼 활성화 설정
+        GameUIManager.instance.ActiveAttackDefenceButton(false);
+
+        if (isAttacker) // 플레이어가 공격권을 가지고 있는 경우
+        {
+            if(atkDefSelection == AtkDef.Attack) // 공격을 누른 경우
+            {
+                GameUIManager.instance.ChanageCharacterImage(Character.State.AttackSuccess);
+
+                computerCurrentHp--;
+                GameUIManager.instance.ChangeHpImage(playerCurrentHp, computerCurrentHp);
+            }
+            else
+            {
+                GameUIManager.instance.ChanageCharacterImage(Character.State.AttackFailure);
+            }
+        }
+        else // 플레이어가 공격권을 가지고 있지 않은 경우
+        {
+            if(atkDefSelection == AtkDef.Defence) // 방어를 누른 경우
+            {
+                GameUIManager.instance.ChanageCharacterImage(Character.State.DefenceSuccess);
+            }
+            else
+            {
+                GameUIManager.instance.ChanageCharacterImage(Character.State.DefenceFailure);
+
+                playerCurrentHp--;
+                GameUIManager.instance.ChangeHpImage(playerCurrentHp, computerCurrentHp);
+            }
+        }
+
+        // 결과 이미지를 보여주는 동안 대기
+        yield return AtkDefLatencyTime;
+    }
+
+    // 게임 종료
+    void EndGame()
+    {
+        Time.timeScale = 0;
+
+        GameUIManager.instance.ActiveSpeechBubble(false);
+
+        // 체력 관련 승패 처리
+        if(computerCurrentHp == 0) // 플레이어가 이긴 경우
+        {
+            GameUIManager.instance.ChanageCharacterImage(Character.State.Win);
+            GameUIManager.instance.SetResultText(true, "You Win!");
+        }
+        else
+        {
+            GameUIManager.instance.ChanageCharacterImage(Character.State.Lose);
+            GameUIManager.instance.SetResultText(true, "You Lose.");
         }
     }
 

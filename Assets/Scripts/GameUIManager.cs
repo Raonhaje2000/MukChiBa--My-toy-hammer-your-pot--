@@ -19,6 +19,9 @@ public class GameUIManager : MonoBehaviour
     // 일시 정지 버튼
     [SerializeField] Button pauseButton;
 
+    // 결과 텍스트
+    [SerializeField] TextMeshProUGUI resultText;
+
     // 캐릭터 말풍선 이미지
     [SerializeField] Image playerSpeechBubbleImage;
     [SerializeField] Image computerSpeechBubbleImage;
@@ -78,7 +81,10 @@ public class GameUIManager : MonoBehaviour
     {
         InitializeSelectionImage();
 
-        characterImage.sprite = characterComponent.ReturnImage(Character.State.Initial);
+        ChanageCharacterImage(Character.State.Initial);
+
+        ActiveSpeechBubble(true);
+        SetResultText(false);
     }
 
     // 리스너 추가
@@ -101,12 +107,12 @@ public class GameUIManager : MonoBehaviour
 
     void ClickAttackButton()
     {
-
+        GameManager.instance.ChangeAtkDefSelection(GameManager.AtkDef.Attack);
     }
 
     void ClickDefenceButton()
     {
-        
+        GameManager.instance.ChangeAtkDefSelection(GameManager.AtkDef.Defence);
     }
 
     void ClickMukButton()
@@ -182,8 +188,8 @@ public class GameUIManager : MonoBehaviour
     {
         // 다 차있지 않은 체력 이미지 인덱스
         // - 체력이 5인 경우 : 3 - 2 - 1 = 0으로 0번째 체력 이미지는 풀 하트가 아님
-        int playerNotFullHpIndex = (GameManager.instance.MAX_HP / 2) - (playerHp / 2) - 1;
-        int computerNotFullHpIndex = (GameManager.instance.MAX_HP / 2) - (computerHp / 2) - 1;
+        int playerNotFullHpIndex = (GameManager.instance.MaxHp / 2) - (playerHp / 2) - 1;
+        int computerNotFullHpIndex = (GameManager.instance.MaxHp / 2) - (computerHp / 2) - 1;
 
         // 플레이어 체력 이미지 변경
         for (int i = playerHpImages.Length - 1; i >= 0; i--)
@@ -228,5 +234,20 @@ public class GameUIManager : MonoBehaviour
     {
         playerSelectionImage.sprite = null;
         computerSelectionImage.sprite = null;
+    }
+
+    // 말풍선 이미지 활성 상태 변경
+    public void ActiveSpeechBubble(bool active)
+    {
+        playerSpeechBubbleImage.gameObject.SetActive(active);
+        computerSpeechBubbleImage.gameObject.SetActive(active);
+    }
+
+    // 결과 텍스트 변경
+    public void SetResultText(bool active, string text = "")
+    {
+        resultText.gameObject.SetActive(active);
+
+        resultText.text = text;
     }
 }
