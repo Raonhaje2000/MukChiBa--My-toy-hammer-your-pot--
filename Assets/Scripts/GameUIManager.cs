@@ -19,6 +19,9 @@ public class GameUIManager : MonoBehaviour
     // 일시 정지 버튼
     [SerializeField] Button pauseButton;
 
+    // 일시 정지 메뉴
+    [SerializeField] GameObject pauseMenuObject;
+
     // 결과 텍스트
     [SerializeField] TextMeshProUGUI resultText;
 
@@ -55,6 +58,10 @@ public class GameUIManager : MonoBehaviour
 
     Character characterComponent;
 
+    // 버튼 활성 상태
+    bool atkDefButtonState;
+    bool mukChiBaButtonState;
+
     void Awake()
     {
         if (instance == null)
@@ -79,6 +86,8 @@ public class GameUIManager : MonoBehaviour
     // 초기화
     void Initialize()
     {
+        pauseMenuObject.SetActive(false);
+
         InitializeSelectionImage();
 
         ChanageCharacterImage(Character.State.Initial);
@@ -102,7 +111,7 @@ public class GameUIManager : MonoBehaviour
 
     void ClickPauseButton()
     {
-
+        SetPauseState(true);
     }
 
     void ClickAttackButton()
@@ -215,18 +224,22 @@ public class GameUIManager : MonoBehaviour
     }
 
     // 공격 버튼 활성 상태 변경
-    public void ActiveAttackDefenceButton(bool active)
+    public void ActiveAttackDefenceButton(bool active, bool isPause = false)
     {
         attackButton.interactable = active;
         defenceButton.interactable = active;
+
+        if(!isPause) atkDefButtonState = active;
     }
 
     // 묵찌빠 버튼 활성 상태 변경
-    public void ActiveMukChiBaButton(bool active)
+    public void ActiveMukChiBaButton(bool active, bool isPause = false)
     {
         mukButton.interactable = active;
         chiButton.interactable = active;
         baButton.interactable = active;
+
+        if (!isPause) mukChiBaButtonState = active;
     }
 
     // 선택 이미지 초기화
@@ -243,11 +256,35 @@ public class GameUIManager : MonoBehaviour
         computerSpeechBubbleImage.gameObject.SetActive(active);
     }
 
-    // 결과 텍스트 변경
+    // 결과 텍스트 설정
     public void SetResultText(bool active, string text = "")
     {
         resultText.gameObject.SetActive(active);
 
         resultText.text = text;
+    }
+
+    // 일시 정지 상태 설정
+    public void SetPauseState(bool active)
+    {
+        pauseMenuObject.SetActive(active);
+
+        // 일시 정지 버튼 상호작용 상태 변경
+        pauseButton.interactable = !active;
+
+        if(active) // 일시 정지 상태인 경우
+        {
+            // 버튼 비활성화
+            ActiveAttackDefenceButton(false, true);
+            ActiveMukChiBaButton(false, true);
+        }
+        else // 일시 정지 해제 상태인 경우
+        {
+            // 버튼을 누르기 전 활성 상태로 변경
+            ActiveAttackDefenceButton(atkDefButtonState, true);
+            ActiveMukChiBaButton(mukChiBaButtonState, true);
+        }
+
+        Time.timeScale = (active) ? 0 : 1;
     }
 }

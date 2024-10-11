@@ -43,7 +43,7 @@ public class TitleUIManager : MonoBehaviour
 
     void Start()
     {
-        AddListeners(); // 버튼 리스너 추가
+        AddListeners(); // 리스너 추가
 
         soundBarObject.SetActive(false);
 
@@ -53,7 +53,7 @@ public class TitleUIManager : MonoBehaviour
     // 리스너 추가
     void AddListeners()
     {
-        soundButton.onClick.AddListener(ClickSoundButtonButton);
+        soundButton.onClick.AddListener(ClickSoundButton);
 
         startButton.onClick.AddListener(ClickStartButton);
         recordButton.onClick.AddListener(ClickRecordButton);
@@ -64,7 +64,7 @@ public class TitleUIManager : MonoBehaviour
     }
 
     // 사운드 버튼 클릭
-    void ClickSoundButtonButton()
+    void ClickSoundButton()
     {
         soundBarObject.SetActive(!soundBarObject.activeSelf);
     }
