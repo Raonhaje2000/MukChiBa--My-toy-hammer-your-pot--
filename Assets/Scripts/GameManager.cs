@@ -41,9 +41,16 @@ public class GameManager : MonoBehaviour
     // 공격과 방어 중 선택한 것
     [SerializeField] AtkDef atkDefSelection;
 
+    GamePlayData playData; // 저장할 데이터
+
     public int MaxHp
     {
         get { return MAX_HP; }
+    }
+
+    public GamePlayData PlayData
+    {
+        get { return playData; }
     }
 
     void Awake()
@@ -68,6 +75,8 @@ public class GameManager : MonoBehaviour
     // 초기화
     void Initialize()
     {
+        playData = new GamePlayData();
+
         playerCurrentHp = MAX_HP;
         computerCurrentHp = MAX_HP;
 
