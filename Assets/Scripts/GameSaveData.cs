@@ -5,12 +5,25 @@ using System.Collections.Generic;
 [Serializable]
 public class GameSaveData
 {
+    const int MAX_DATA = 10; // 저장되는 데이터 최대치 (데이터가 많을 수록 처리가 오래 걸리는 것 방지용)
+
     public int saveCount;                   // 저장된 횟수
     public List<GamePlayData> playDataList; // 저장된 게임 데이터
 
-    // 게임 진행 시간 우선 순위 (오름차순 정렬)
+    public int MaxData
+    {
+        get { return MAX_DATA; }
+    }
 
-    // 게임 이긴 횟수 우선 순위 (내림차순 정렬)
+    public GameSaveData()
+    {
+        saveCount = 0;
+        playDataList = new List<GamePlayData>();
+    }
 
-    // 해당 데이터 찾기
+    public void Save(GamePlayData data)
+    {
+        saveCount++;
+        playDataList.Add(data);
+    }
 }

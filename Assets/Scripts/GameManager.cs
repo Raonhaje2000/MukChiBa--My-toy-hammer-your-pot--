@@ -5,7 +5,7 @@ using UnityEngine;
 // 게임 플레이와 관련된 부분들을 처리하는 클래스
 public class GameManager : MonoBehaviour
 {
-    const int MAX_HP = 6; // 최대 체력
+    const int MAX_HP = 2; // 최대 체력
 
     const float INIT_TIME = 2.0f;           // 게임 첫 판 제한 시간
     const float DECREASE_TIME = 0.2f;      // 판 당 감소하는 시간
@@ -46,11 +46,6 @@ public class GameManager : MonoBehaviour
     public int MaxHp
     {
         get { return MAX_HP; }
-    }
-
-    public GamePlayData PlayData
-    {
-        get { return playData; }
     }
 
     void Awake()
@@ -214,8 +209,18 @@ public class GameManager : MonoBehaviour
 
                 if (result != Result.Draw)
                 {
-                    // 플레이어가 가위바위보에서 이긴 경우 공격권을 가져감
-                    isAttacker = (result == Result.Win) ? true : false;
+                    if (result == Result.Win) // 플레이어가 가위바위보에서 이긴 경우
+                    {
+                        // 공격권을 가져감
+                        isAttacker = true;
+
+                        // 플레이 데이터 업데이트
+                        playData.UpdateWin();
+                    }
+                    else
+                    {
+                        isAttacker = false;
+                    }
 
                     // 묵찌빠 진행
                     break;
@@ -271,8 +276,18 @@ public class GameManager : MonoBehaviour
 
                 if (result != Result.Draw)
                 {
-                    // 플레이어가 이긴 경우 공격권을 가져감
-                    isAttacker = (result == Result.Win) ? true : false;
+                    if (result == Result.Win) // 플레이어가 가위바위보에서 이긴 경우
+                    {
+                        // 공격권을 가져감
+                        isAttacker = true;
+
+                        // 플레이 데이터 업데이트
+                        playData.UpdateWin();
+                    }
+                    else
+                    {
+                        isAttacker = false;
+                    }
                 }
                 else
                 {
@@ -336,6 +351,9 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        // 플레이 데이터 업데이트
+        playData.UpdateAtkDef(isAttacker, count);
+
         // 결과 이미지를 보여주는 동안 대기
         yield return AtkDefLatencyTime;
     }
@@ -358,6 +376,12 @@ public class GameManager : MonoBehaviour
             GameUIManager.instance.ChanageCharacterImage(Character.State.Lose);
             GameUIManager.instance.SetResultText(true, "You Lose.");
         }
+
+        // 플레이 데이터 업데이트
+        playData.UpdateEnd(playTime);
+
+        // 플레이 데이터 저장
+        JsonManager.instance.SaveGameData(playData);
     }
 
     // 게임 설정 초기화

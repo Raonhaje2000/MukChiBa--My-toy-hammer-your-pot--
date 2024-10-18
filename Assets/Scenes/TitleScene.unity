@@ -3214,7 +3214,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3939259749208197463, guid: 3fc9f8e15c14c304d8344ae543d6bf32, type: 3}
       propertyPath: m_Name
-      value: RecordManager
+      value: JsonManager
       objectReference: {fileID: 0}
     - target: {fileID: 8834004706849900309, guid: 3fc9f8e15c14c304d8344ae543d6bf32, type: 3}
       propertyPath: m_LocalPosition.x
