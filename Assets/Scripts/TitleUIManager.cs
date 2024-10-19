@@ -78,7 +78,7 @@ public class TitleUIManager : MonoBehaviour
     // 게임 기록 버튼 클릭
     void ClickRecordButton()
     {
-
+        SceneManager.LoadScene("RecordScene");
     }
 
     // 게임 방법 버튼 클릭
