@@ -48,18 +48,7 @@ public class JsonManager : MonoBehaviour
     public void SaveGameData(GamePlayData playData)
     {
         // 플레이 데이터 저장
-        playData.dataIndex = saveData.saveCount;
         saveData.Save(playData);
-
-        // 기존 데이터 일부 삭제 (불필요한 데이터를 지움으로서 처리가 길어지는 것 방지)
-        //if (saveData.playDataList.Count + 1 > saveData.MaxData)
-        //{
-        //    List<GamePlayData> timeSort = saveData.playDataList.OrderBy(x => x.playTime).ToList<GamePlayData>();
-        //    List<GamePlayData> winSort = saveData.playDataList.OrderBy(x => x.winningPercentage).ToList<GamePlayData>();
-
-        //    // 최하위 요소가 공통되는 경우 삭제
-
-        //}
 
         // 클래스를 Json으로 변환
         string jsonData = JsonUtility.ToJson(saveData, true);

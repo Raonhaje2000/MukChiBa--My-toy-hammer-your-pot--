@@ -5,6 +5,8 @@ using System.Collections.Generic;
 [Serializable]
 public class GamePlayData
 {
+    public enum VariableName { Time = 0, WinPer = 1, atkPer = 2 }
+
     public int dataIndex; // 데이터 인덱스
 
     public string playDate; // 게임을 한 날짜
@@ -61,5 +63,21 @@ public class GamePlayData
         // 플레이어가 게임 진행동안 아무것도 내지않아 게임이 종료된 경우 0으로 처리
         winningPercentage = (playTotalCount == 0) ? 0.0f : (float)winCount / (float)playTotalCount * 100.0f;
         attackPercentage = (atkDefCount == 0) ? 0.0f : (float)atkPossibleCount / (float)atkDefCount * 100.0f;
+    }
+
+    // 값 반환 (해당 함수값을 통해 탐색 함수 하나만 구현하기 위함)
+    public float ReturnVariableValue(VariableName variable)
+    {
+        switch(variable)
+        {
+            case VariableName.Time: 
+                return playTime;
+            case VariableName.WinPer: 
+                return winningPercentage;
+            case VariableName.atkPer:
+                return attackPercentage;
+        }
+
+        return -1.0f;
     }
 }
