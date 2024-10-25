@@ -9,6 +9,11 @@ public class SoundManager : MonoBehaviour
 
     int volume; // BGM º¼·ı
 
+    public static SoundManager Instance
+    {
+        get { return instance; }
+    }
+
     public int Volume
     { 
         get { return volume; }

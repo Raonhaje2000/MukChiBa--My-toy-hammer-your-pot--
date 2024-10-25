@@ -1,23 +1,49 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 [Serializable]
 public class GameSaveData
 {
-    const int MAX_DATA = 5; // 저장되는 데이터 최대치 (데이터가 많을 수록 처리가 오래 걸리는 것 방지용)
+    const int MAX_DATA = 10; // 저장되는 데이터 최대치 (데이터가 많을 수록 처리가 오래 걸리는 것 방지용)
 
-    public int saveCount;                        // 저장된 횟수
+    [SerializeField] int saveCount;                        // 저장된 횟수
 
     // 저장된 게임 데이터들
-    public List<GamePlayData> timeLongSort;      // 가장 오래 버틴 시간 정렬
-    public List<GamePlayData> timeShortSort;     // 가장 적게 버틴 시간 정렬
-    public List<GamePlayData> winPercentSort;    // 승률 높은 순으로 정렬
-    public List<GamePlayData> attackPercentSort; // 공격 확률 높은 순으로 정렬
+    [SerializeField] List<GamePlayData> timeLongSort;      // 가장 오래 버틴 시간 정렬
+    [SerializeField] List<GamePlayData> timeShortSort;     // 가장 적게 버틴 시간 정렬
+    [SerializeField] List<GamePlayData> winPercentSort;    // 승률 높은 순으로 정렬
+    [SerializeField] List<GamePlayData> attackPercentSort; // 공격 확률 높은 순으로 정렬
 
     public int MaxData
     {
         get { return MAX_DATA; }
+    }
+
+    public int SaveCount
+    {
+        get { return saveCount; }
+    }
+
+    public List<GamePlayData> TimeLongSort
+    { 
+        get { return timeLongSort; }
+    }
+
+    public List<GamePlayData> TimeShortSort
+    {
+        get { return timeShortSort; }
+    }
+
+    public List<GamePlayData> WinPercentSort
+    {
+        get { return winPercentSort; }
+    }
+
+    public List<GamePlayData> AttackPercentSort
+    {
+        get { return attackPercentSort; }
     }
 
     public GameSaveData()

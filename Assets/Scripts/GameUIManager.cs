@@ -7,7 +7,7 @@ using TMPro;
 // 게임 UI와 관련된 부분을 처리하는 클래스
 public class GameUIManager : MonoBehaviour
 {
-    public static GameUIManager instance;
+    static GameUIManager instance;
 
     // 체력 이미지
     [SerializeField] Image[] playerHpImages = new Image[3]; // 플레이어 체력
@@ -62,6 +62,11 @@ public class GameUIManager : MonoBehaviour
     bool atkDefButtonState;
     bool mukChiBaButtonState;
 
+    public static GameUIManager Instance
+    {
+        get { return instance; }
+    }
+
     void Awake()
     {
         if (instance == null)
@@ -109,40 +114,46 @@ public class GameUIManager : MonoBehaviour
         baButton.onClick.AddListener(ClickBaButton);
     }
 
+    // 일시정지 버튼 클릭
     void ClickPauseButton()
     {
         SetPauseState(true);
     }
 
+    // 공격 버튼 클릭
     void ClickAttackButton()
     {
-        GameManager.instance.ChangeAtkDefSelection(GameManager.AtkDef.Attack);
+        GameManager.Instance.ChangeAtkDefSelection(GameManager.AtkDef.Attack);
     }
 
+    // 방어 버튼 클릭
     void ClickDefenceButton()
     {
-        GameManager.instance.ChangeAtkDefSelection(GameManager.AtkDef.Defence);
+        GameManager.Instance.ChangeAtkDefSelection(GameManager.AtkDef.Defence);
     }
 
+    // 묵 버튼 클릭
     void ClickMukButton()
     {
         playerSelectionImage.sprite = mukSprite;
 
-        GameManager.instance.ChangePlayerSelection(GameManager.MukChiBa.Muk);
+        GameManager.Instance.ChangePlayerSelection(GameManager.MukChiBa.Muk);
     }
 
+    // 찌 버튼 클릭
     void ClickChiButton()
     {
         playerSelectionImage.sprite = chiSprite;
 
-        GameManager.instance.ChangePlayerSelection(GameManager.MukChiBa.Chi);
+        GameManager.Instance.ChangePlayerSelection(GameManager.MukChiBa.Chi);
     }
 
+    // 빠 버튼 클릭
     void ClickBaButton()
     {
         playerSelectionImage.sprite = baSprite;
 
-        GameManager.instance.ChangePlayerSelection(GameManager.MukChiBa.Ba);
+        GameManager.Instance.ChangePlayerSelection(GameManager.MukChiBa.Ba);
     }
 
     // 전체 플레이 시간 텍스트 업데이트
@@ -151,7 +162,8 @@ public class GameUIManager : MonoBehaviour
         int min = Mathf.FloorToInt(time / 60.0f);
         int sec = Mathf.FloorToInt(time % 60.0f);
 
-        playTimeText.text = min.ToString("00") + ":" + sec.ToString("00");
+        // 60분을 넘길 경우 59:59로 고정 표기
+        playTimeText.text = (min < 60) ? min.ToString("00") + ":" + sec.ToString("00") : "59:59";
     }
 
     // 캐릭터 이미지 변경
@@ -197,8 +209,8 @@ public class GameUIManager : MonoBehaviour
     {
         // 다 차있지 않은 체력 이미지 인덱스
         // - 체력이 5인 경우 : 3 - 2 - 1 = 0으로 0번째 체력 이미지는 풀 하트가 아님
-        int playerNotFullHpIndex = (GameManager.instance.MaxHp / 2) - (playerHp / 2) - 1;
-        int computerNotFullHpIndex = (GameManager.instance.MaxHp / 2) - (computerHp / 2) - 1;
+        int playerNotFullHpIndex = (GameManager.Instance.MaxHp / 2) - (playerHp / 2) - 1;
+        int computerNotFullHpIndex = (GameManager.Instance.MaxHp / 2) - (computerHp / 2) - 1;
 
         // 플레이어 체력 이미지 변경
         for (int i = playerHpImages.Length - 1; i >= 0; i--)

@@ -3,97 +3,105 @@
     "timeLongSort": [
         {
             "dataIndex": 1,
-            "playDate": "2024.10.22 22:54:47",
-            "playTime": 76.64542388916016,
-            "atkDefCount": 3,
-            "atkPossibleCount": 1,
-            "playTotalCount": 15,
-            "winCount": 8,
-            "winningPercentage": 53.33333206176758,
-            "attackPercentage": 33.33333206176758
+            "playDate": "2024.10.25 02:58:41",
+            "playResult": 2,
+            "playTime": 26.21393585205078,
+            "atkDefCount": 1,
+            "atkPossibleCount": 0,
+            "playTotalCount": 4,
+            "winCount": 1,
+            "winningPercentage": 25.0,
+            "attackPercentage": 0.0
         },
         {
             "dataIndex": 0,
-            "playDate": "2024.10.22 22:53:54",
-            "playTime": 22.811853408813478,
-            "atkDefCount": 1,
-            "atkPossibleCount": 1,
-            "playTotalCount": 3,
-            "winCount": 1,
-            "winningPercentage": 33.33333206176758,
-            "attackPercentage": 100.0
+            "playDate": "2024.10.25 02:58:28",
+            "playResult": 2,
+            "playTime": 8.006844520568848,
+            "atkDefCount": 0,
+            "atkPossibleCount": 0,
+            "playTotalCount": 0,
+            "winCount": 0,
+            "winningPercentage": 0.0,
+            "attackPercentage": 0.0
         }
     ],
     "timeShortSort": [
         {
             "dataIndex": 0,
-            "playDate": "2024.10.22 22:53:54",
-            "playTime": 22.811853408813478,
-            "atkDefCount": 1,
-            "atkPossibleCount": 1,
-            "playTotalCount": 3,
-            "winCount": 1,
-            "winningPercentage": 33.33333206176758,
-            "attackPercentage": 100.0
+            "playDate": "2024.10.25 02:58:28",
+            "playResult": 2,
+            "playTime": 8.006844520568848,
+            "atkDefCount": 0,
+            "atkPossibleCount": 0,
+            "playTotalCount": 0,
+            "winCount": 0,
+            "winningPercentage": 0.0,
+            "attackPercentage": 0.0
         },
         {
             "dataIndex": 1,
-            "playDate": "2024.10.22 22:54:47",
-            "playTime": 76.64542388916016,
-            "atkDefCount": 3,
-            "atkPossibleCount": 1,
-            "playTotalCount": 15,
-            "winCount": 8,
-            "winningPercentage": 53.33333206176758,
-            "attackPercentage": 33.33333206176758
+            "playDate": "2024.10.25 02:58:41",
+            "playResult": 2,
+            "playTime": 26.21393585205078,
+            "atkDefCount": 1,
+            "atkPossibleCount": 0,
+            "playTotalCount": 4,
+            "winCount": 1,
+            "winningPercentage": 25.0,
+            "attackPercentage": 0.0
         }
     ],
     "winPercentSort": [
         {
             "dataIndex": 1,
-            "playDate": "2024.10.22 22:54:47",
-            "playTime": 76.64542388916016,
-            "atkDefCount": 3,
-            "atkPossibleCount": 1,
-            "playTotalCount": 15,
-            "winCount": 8,
-            "winningPercentage": 53.33333206176758,
-            "attackPercentage": 33.33333206176758
+            "playDate": "2024.10.25 02:58:41",
+            "playResult": 2,
+            "playTime": 26.21393585205078,
+            "atkDefCount": 1,
+            "atkPossibleCount": 0,
+            "playTotalCount": 4,
+            "winCount": 1,
+            "winningPercentage": 25.0,
+            "attackPercentage": 0.0
         },
         {
             "dataIndex": 0,
-            "playDate": "2024.10.22 22:53:54",
-            "playTime": 22.811853408813478,
-            "atkDefCount": 1,
-            "atkPossibleCount": 1,
-            "playTotalCount": 3,
-            "winCount": 1,
-            "winningPercentage": 33.33333206176758,
-            "attackPercentage": 100.0
+            "playDate": "2024.10.25 02:58:28",
+            "playResult": 2,
+            "playTime": 8.006844520568848,
+            "atkDefCount": 0,
+            "atkPossibleCount": 0,
+            "playTotalCount": 0,
+            "winCount": 0,
+            "winningPercentage": 0.0,
+            "attackPercentage": 0.0
         }
     ],
     "attackPercentSort": [
         {
-            "dataIndex": 0,
-            "playDate": "2024.10.22 22:53:54",
-            "playTime": 22.811853408813478,
+            "dataIndex": 1,
+            "playDate": "2024.10.25 02:58:41",
+            "playResult": 2,
+            "playTime": 26.21393585205078,
             "atkDefCount": 1,
-            "atkPossibleCount": 1,
-            "playTotalCount": 3,
+            "atkPossibleCount": 0,
+            "playTotalCount": 4,
             "winCount": 1,
-            "winningPercentage": 33.33333206176758,
-            "attackPercentage": 100.0
+            "winningPercentage": 25.0,
+            "attackPercentage": 0.0
         },
         {
-            "dataIndex": 1,
-            "playDate": "2024.10.22 22:54:47",
-            "playTime": 76.64542388916016,
-            "atkDefCount": 3,
-            "atkPossibleCount": 1,
-            "playTotalCount": 15,
-            "winCount": 8,
-            "winningPercentage": 53.33333206176758,
-            "attackPercentage": 33.33333206176758
+            "dataIndex": 0,
+            "playDate": "2024.10.25 02:58:28",
+            "playResult": 2,
+            "playTime": 8.006844520568848,
+            "atkDefCount": 0,
+            "atkPossibleCount": 0,
+            "playTotalCount": 0,
+            "winCount": 0,
+            "winningPercentage": 0.0,
+            "attackPercentage": 0.0
         }
     ]
 }

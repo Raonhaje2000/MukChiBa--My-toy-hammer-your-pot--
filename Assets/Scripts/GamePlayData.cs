@@ -1,15 +1,19 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 [Serializable]
 public class GamePlayData
 {
+    public enum Result { None = 0, Win = 1, Lose = 2 }
     public enum VariableName { Time = 0, WinPer = 1, atkPer = 2 }
 
     public int dataIndex; // 데이터 인덱스
 
     public string playDate; // 게임을 한 날짜
+
+    public int playResult; // 게임 결과     // 버전 문제로 System.Text.Json 을 사용 못해 Json으로 변환 불가능 -> enum을 정수값으로 변경하여 저장하는 방식 사용
 
     public float playTime; // 게임 진행 시간
 
@@ -27,6 +31,8 @@ public class GamePlayData
         dataIndex = -1;
 
         playDate = DateTime.Now.ToString("yyyy.MM.dd HH:mm:ss");
+
+        playResult = (int)Result.None; // 강제 형변환
 
         playTime = 0.0f;
 
@@ -56,8 +62,9 @@ public class GamePlayData
     }
 
     // 게임이 종료되면 업데이트
-    public void UpdateEnd(float playTime)
+    public void UpdateEnd(Result result, float playTime)
     {
+        this.playResult = (int)result;
         this.playTime = playTime;
 
         // 플레이어가 게임 진행동안 아무것도 내지않아 게임이 종료된 경우 0으로 처리

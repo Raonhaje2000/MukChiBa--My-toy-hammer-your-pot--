@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     public enum Result { Win = 1, Draw = 0, Lose = -1 } // 묵찌빠 결과
     public enum AtkDef { Attack = 1, None = 0, Defence = -1 } // 공격 방어
 
-    public static GameManager instance;
+    static GameManager instance;
 
     // 현재 체력
     [SerializeField] int playerCurrentHp;
@@ -42,6 +42,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] AtkDef atkDefSelection;
 
     GamePlayData playData; // 저장할 데이터
+
+    public static GameManager Instance
+    {
+        get { return instance; }
+    }
 
     public int MaxHp
     {
@@ -75,7 +80,7 @@ public class GameManager : MonoBehaviour
         playerCurrentHp = MAX_HP;
         computerCurrentHp = MAX_HP;
 
-        GameUIManager.instance.ChangeHpImage(playerCurrentHp, computerCurrentHp);
+        GameUIManager.Instance.ChangeHpImage(playerCurrentHp, computerCurrentHp);
 
         count = 0;
 
@@ -106,7 +111,7 @@ public class GameManager : MonoBehaviour
         {
             playTime += Time.deltaTime;
 
-            GameUIManager.instance.UpdatePlayTimeText(playTime);
+            GameUIManager.Instance.UpdatePlayTimeText(playTime);
 
             yield return null;
         }
@@ -125,7 +130,7 @@ public class GameManager : MonoBehaviour
 
         computerSelection = (MukChiBa) index; // 정수를 enum 으로 변경
 
-        GameUIManager.instance.ChangeComputerSelectionImage(computerSelection);
+        GameUIManager.Instance.ChangeComputerSelectionImage(computerSelection);
     }
 
     // 공격 방어 선택 변경
@@ -180,7 +185,7 @@ public class GameManager : MonoBehaviour
             count++;
 
             // 버튼 활성화 설정
-            GameUIManager.instance.ActiveMukChiBaButton(false);
+            GameUIManager.Instance.ActiveMukChiBaButton(false);
 
             // 컴퓨터 선택 화면에 보이기
             ChangeComputerSelection();
@@ -188,11 +193,11 @@ public class GameManager : MonoBehaviour
             // 결과 처리
             if (playerSelection == MukChiBa.None) // 플레이어가 선택을 안 했을 경우
             {
-                GameUIManager.instance.ChanageCharacterImage(Character.State.NotSelect);
+                GameUIManager.Instance.ChanageCharacterImage(Character.State.NotSelect);
 
                 // 플레이어의 체력 감소
                 playerCurrentHp--;
-                GameUIManager.instance.ChangeHpImage(playerCurrentHp, computerCurrentHp);
+                GameUIManager.Instance.ChangeHpImage(playerCurrentHp, computerCurrentHp);
 
                 // 선택 이미지를 보여주는 동안 대기
                 yield return SelectionLatencyTime;
@@ -247,7 +252,7 @@ public class GameManager : MonoBehaviour
             count++;
 
             // 버튼 활성화 설정
-            GameUIManager.instance.ActiveMukChiBaButton(false);
+            GameUIManager.Instance.ActiveMukChiBaButton(false);
 
             // 컴퓨터 선택 화면에 보이기
             ChangeComputerSelection();
@@ -255,11 +260,11 @@ public class GameManager : MonoBehaviour
             // 결과 처리
             if (playerSelection == MukChiBa.None) // 플레이어가 선택을 안 했을 경우
             {
-                GameUIManager.instance.ChanageCharacterImage(Character.State.NotSelect);
+                GameUIManager.Instance.ChanageCharacterImage(Character.State.NotSelect);
 
                 // 플레이어의 체력 감소
                 playerCurrentHp--;
-                GameUIManager.instance.ChangeHpImage(playerCurrentHp, computerCurrentHp);
+                GameUIManager.Instance.ChangeHpImage(playerCurrentHp, computerCurrentHp);
 
                 // 선택 이미지를 보여주는 동안 대기
                 yield return SelectionLatencyTime;
@@ -309,45 +314,45 @@ public class GameManager : MonoBehaviour
         atkDefSelection = AtkDef.None;
 
         // 화면 이미지 초기화
-        GameUIManager.instance.InitializeSelectionImage();
-        GameUIManager.instance.ChanageCharacterImage(Character.State.Initial);
+        GameUIManager.Instance.InitializeSelectionImage();
+        GameUIManager.Instance.ChanageCharacterImage(Character.State.Initial);
 
         // 버튼 활성화 설정
-        GameUIManager.instance.ActiveAttackDefenceButton(true);
-        GameUIManager.instance.ActiveMukChiBaButton(false);
+        GameUIManager.Instance.ActiveAttackDefenceButton(true);
+        GameUIManager.Instance.ActiveMukChiBaButton(false);
 
         // 남은 제한 시간 업데이트
         yield return UpdateRemainingTime();
 
         // 버튼 활성화 설정
-        GameUIManager.instance.ActiveAttackDefenceButton(false);
+        GameUIManager.Instance.ActiveAttackDefenceButton(false);
 
         if (isAttacker) // 플레이어가 공격권을 가지고 있는 경우
         {
             if(atkDefSelection == AtkDef.Attack) // 공격을 누른 경우
             {
-                GameUIManager.instance.ChanageCharacterImage(Character.State.AttackSuccess);
+                GameUIManager.Instance.ChanageCharacterImage(Character.State.AttackSuccess);
 
                 computerCurrentHp--;
-                GameUIManager.instance.ChangeHpImage(playerCurrentHp, computerCurrentHp);
+                GameUIManager.Instance.ChangeHpImage(playerCurrentHp, computerCurrentHp);
             }
             else
             {
-                GameUIManager.instance.ChanageCharacterImage(Character.State.AttackFailure);
+                GameUIManager.Instance.ChanageCharacterImage(Character.State.AttackFailure);
             }
         }
         else // 플레이어가 공격권을 가지고 있지 않은 경우
         {
             if(atkDefSelection == AtkDef.Defence) // 방어를 누른 경우
             {
-                GameUIManager.instance.ChanageCharacterImage(Character.State.DefenceSuccess);
+                GameUIManager.Instance.ChanageCharacterImage(Character.State.DefenceSuccess);
             }
             else
             {
-                GameUIManager.instance.ChanageCharacterImage(Character.State.DefenceFailure);
+                GameUIManager.Instance.ChanageCharacterImage(Character.State.DefenceFailure);
 
                 playerCurrentHp--;
-                GameUIManager.instance.ChangeHpImage(playerCurrentHp, computerCurrentHp);
+                GameUIManager.Instance.ChangeHpImage(playerCurrentHp, computerCurrentHp);
             }
         }
 
@@ -363,25 +368,28 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 0;
 
-        GameUIManager.instance.ActiveSpeechBubble(false);
+        GameUIManager.Instance.ActiveSpeechBubble(false);
 
         // 체력 관련 승패 처리
         if(computerCurrentHp == 0) // 플레이어가 이긴 경우
         {
-            GameUIManager.instance.ChanageCharacterImage(Character.State.Win);
-            GameUIManager.instance.SetResultText(true, "You Win!");
+            GameUIManager.Instance.ChanageCharacterImage(Character.State.Win);
+            GameUIManager.Instance.SetResultText(true, "You Win!");
+
+            // 플레이 데이터 업데이트
+            playData.UpdateEnd(GamePlayData.Result.Win, playTime);
         }
         else
         {
-            GameUIManager.instance.ChanageCharacterImage(Character.State.Lose);
-            GameUIManager.instance.SetResultText(true, "You Lose.");
+            GameUIManager.Instance.ChanageCharacterImage(Character.State.Lose);
+            GameUIManager.Instance.SetResultText(true, "You Lose.");
+
+            // 플레이 데이터 업데이트
+            playData.UpdateEnd(GamePlayData.Result.Lose, playTime);
         }
 
-        // 플레이 데이터 업데이트
-        playData.UpdateEnd(playTime);
-
         // 플레이 데이터 저장
-        JsonManager.instance.SaveGameData(playData);
+        JsonManager.Instance.SaveGameData(playData);
     }
 
     // 게임 설정 초기화
@@ -398,12 +406,12 @@ public class GameManager : MonoBehaviour
         computerSelection = MukChiBa.None;
 
         // 화면 이미지 초기화
-        GameUIManager.instance.InitializeSelectionImage();
-        GameUIManager.instance.ChanageCharacterImage(Character.State.Initial);
+        GameUIManager.Instance.InitializeSelectionImage();
+        GameUIManager.Instance.ChanageCharacterImage(Character.State.Initial);
 
         // 버튼 활성화 설정
-        GameUIManager.instance.ActiveAttackDefenceButton(false);
-        GameUIManager.instance.ActiveMukChiBaButton(true);
+        GameUIManager.Instance.ActiveAttackDefenceButton(false);
+        GameUIManager.Instance.ActiveMukChiBaButton(true);
     }
 
     // 남은 제한 시간 업데이트
@@ -413,7 +421,7 @@ public class GameManager : MonoBehaviour
         {
             remainingTime -= Time.deltaTime;
 
-            GameUIManager.instance.UpdateTimerBar(maxTime, remainingTime);
+            GameUIManager.Instance.UpdateTimerBar(maxTime, remainingTime);
 
             yield return null;
         }

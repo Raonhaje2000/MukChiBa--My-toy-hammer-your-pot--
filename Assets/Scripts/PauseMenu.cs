@@ -27,7 +27,7 @@ public class PauseMenu : MonoBehaviour
     // 타이틀로 버튼 클릭
     void ClickTitleButton()
     {
-        GameUIManager.instance.SetPauseState(false);
+        GameUIManager.Instance.SetPauseState(false);
 
         SceneManager.LoadScene("TitleScene");
     }
@@ -35,7 +35,7 @@ public class PauseMenu : MonoBehaviour
     // 다시하기 버튼 클릭
     void ClickRestartButton()
     {
-        GameUIManager.instance.SetPauseState(false);
+        GameUIManager.Instance.SetPauseState(false);
 
         SceneManager.LoadScene("GameScene");
     }
@@ -43,6 +43,6 @@ public class PauseMenu : MonoBehaviour
     // 이어하기 버튼 클릭
     void ClickContinueButton()
     {
-        GameUIManager.instance.SetPauseState(false);
+        GameUIManager.Instance.SetPauseState(false);
     }
 }
