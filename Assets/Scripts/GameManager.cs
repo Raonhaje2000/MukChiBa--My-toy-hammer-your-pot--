@@ -70,6 +70,8 @@ public class GameManager : MonoBehaviour
         Initialize(); // 초기화
 
         StartGame(); // 게임 시작
+
+        SoundManager.Instance.PlayBgm(SoundManager.BGM.Game); // BGM 재생
     }
 
     // 초기화

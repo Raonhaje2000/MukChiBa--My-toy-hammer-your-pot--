@@ -117,24 +117,32 @@ public class GameUIManager : MonoBehaviour
     // 일시정지 버튼 클릭
     void ClickPauseButton()
     {
+        SoundManager.Instance.PlaySfx(SoundManager.SFX.Menu);
+
         SetPauseState(true);
     }
 
     // 공격 버튼 클릭
     void ClickAttackButton()
     {
+        SoundManager.Instance.PlaySfx(SoundManager.SFX.Game);
+
         GameManager.Instance.ChangeAtkDefSelection(GameManager.AtkDef.Attack);
     }
 
     // 방어 버튼 클릭
     void ClickDefenceButton()
     {
+        SoundManager.Instance.PlaySfx(SoundManager.SFX.Game);
+
         GameManager.Instance.ChangeAtkDefSelection(GameManager.AtkDef.Defence);
     }
 
     // 묵 버튼 클릭
     void ClickMukButton()
     {
+        SoundManager.Instance.PlaySfx(SoundManager.SFX.Game);
+
         playerSelectionImage.sprite = mukSprite;
 
         GameManager.Instance.ChangePlayerSelection(GameManager.MukChiBa.Muk);
@@ -143,6 +151,8 @@ public class GameUIManager : MonoBehaviour
     // 찌 버튼 클릭
     void ClickChiButton()
     {
+        SoundManager.Instance.PlaySfx(SoundManager.SFX.Game);
+
         playerSelectionImage.sprite = chiSprite;
 
         GameManager.Instance.ChangePlayerSelection(GameManager.MukChiBa.Chi);
@@ -151,6 +161,8 @@ public class GameUIManager : MonoBehaviour
     // 빠 버튼 클릭
     void ClickBaButton()
     {
+        SoundManager.Instance.PlaySfx(SoundManager.SFX.Game);
+
         playerSelectionImage.sprite = baSprite;
 
         GameManager.Instance.ChangePlayerSelection(GameManager.MukChiBa.Ba);

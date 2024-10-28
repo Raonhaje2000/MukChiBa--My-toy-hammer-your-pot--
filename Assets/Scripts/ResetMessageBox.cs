@@ -22,6 +22,8 @@ public class ResetMessageBox : MonoBehaviour
 
     void ClickYesButton()
     {
+        SoundManager.Instance.PlaySfx(SoundManager.SFX.Menu);
+
         // 기록 초기화
         JsonManager.Instance.ResetGameData();
 
@@ -33,6 +35,8 @@ public class ResetMessageBox : MonoBehaviour
 
     void ClickNoButton()
     {
+        SoundManager.Instance.PlaySfx(SoundManager.SFX.Menu);
+
         gameObject.SetActive(false);
     }
 }

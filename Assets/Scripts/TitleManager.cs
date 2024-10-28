@@ -52,7 +52,9 @@ public class TitleManager : MonoBehaviour
 
         soundBarObject.SetActive(false);
 
-        SetSoundUI(SoundManager.instance.Volume);
+        SetSoundUI(SoundManager.Instance.BgmVolume);
+
+        SoundManager.Instance.PlayBgm(SoundManager.BGM.Title); // BGM 재생
     }
 
     // 리스너 추가
@@ -71,30 +73,38 @@ public class TitleManager : MonoBehaviour
     // 사운드 버튼 클릭
     void ClickSoundButton()
     {
+        SoundManager.Instance.PlaySfx(SoundManager.SFX.Menu);
+
         soundBarObject.SetActive(!soundBarObject.activeSelf);
     }
 
     // 게임 시작 버튼 클릭
     void ClickStartButton()
     {
+        SoundManager.Instance.PlaySfx(SoundManager.SFX.Menu);
+
         SceneManager.LoadScene("GameScene");
     }
 
     // 게임 기록 버튼 클릭
     void ClickRecordButton()
     {
+        SoundManager.Instance.PlaySfx(SoundManager.SFX.Menu);
+
         SceneManager.LoadScene("RecordScene");
     }
 
     // 게임 방법 버튼 클릭
     void ClickHowToPlayButton()
     {
-
+        SoundManager.Instance.PlaySfx(SoundManager.SFX.Menu);
     }
 
     // 게임 종료 버튼 클릭
     void ClickQuitButton()
     {
+        SoundManager.Instance.PlaySfx(SoundManager.SFX.Menu);
+
         Application.Quit();
     }
 
@@ -106,7 +116,7 @@ public class TitleManager : MonoBehaviour
         // 사운드 UI 설정
         SetSoundUI(volume);
 
-        SoundManager.instance.Volume = volume;
+        SoundManager.Instance.ChangeBgmVolume(volume);
     }
 
     // 사운드 UI 설정

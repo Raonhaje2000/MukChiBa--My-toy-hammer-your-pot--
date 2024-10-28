@@ -87,11 +87,16 @@ public class RecordManager : MonoBehaviour
     public void ShowInitialScreen()
     {
         // 초기 화면은 시간 오름차순 버튼을 눌렀을 때로 설정
-        ClickTimeShortButton();
+        ChangeTebButtonsNotSelectedColor();
+        timeShortButton.image.color = selectedColor;
+
+        SetRecordElements(JsonManager.Instance.SaveData.TimeShortSort);
     }
 
     void ClickTimeShortButton()
     {
+        SoundManager.Instance.PlaySfx(SoundManager.SFX.Menu);
+
         ChangeTebButtonsNotSelectedColor();
         timeShortButton.image.color = selectedColor;
 
@@ -100,6 +105,8 @@ public class RecordManager : MonoBehaviour
 
     void ClickTimeLongButton()
     {
+        SoundManager.Instance.PlaySfx(SoundManager.SFX.Menu);
+
         ChangeTebButtonsNotSelectedColor();
         timeLongButton.image.color = selectedColor;
 
@@ -108,6 +115,8 @@ public class RecordManager : MonoBehaviour
 
     void ClickWinningPercentButton()
     {
+        SoundManager.Instance.PlaySfx(SoundManager.SFX.Menu);
+
         ChangeTebButtonsNotSelectedColor();
         winningPercentButton.image.color = selectedColor;
 
@@ -116,6 +125,8 @@ public class RecordManager : MonoBehaviour
 
     void ClickAttackPercentageButton()
     {
+        SoundManager.Instance.PlaySfx(SoundManager.SFX.Menu);
+
         ChangeTebButtonsNotSelectedColor();
         attackPercentageButton.image.color = selectedColor;
 
@@ -125,12 +136,16 @@ public class RecordManager : MonoBehaviour
     // 타이틀로 버튼 클릭
     void ClickTitleButton()
     {
+        SoundManager.Instance.PlaySfx(SoundManager.SFX.Menu);
+
         SceneManager.LoadScene("TitleScene");
     }
 
     // 기록 초기화 버튼 클릭
     void ClickResetButton()
     {
+        SoundManager.Instance.PlaySfx(SoundManager.SFX.Menu);
+
         resetMessageBox.SetActive(true);
     }
 

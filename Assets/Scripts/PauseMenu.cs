@@ -27,6 +27,8 @@ public class PauseMenu : MonoBehaviour
     // 타이틀로 버튼 클릭
     void ClickTitleButton()
     {
+        SoundManager.Instance.PlaySfx(SoundManager.SFX.Menu);
+
         GameUIManager.Instance.SetPauseState(false);
 
         SceneManager.LoadScene("TitleScene");
@@ -35,6 +37,10 @@ public class PauseMenu : MonoBehaviour
     // 다시하기 버튼 클릭
     void ClickRestartButton()
     {
+        SoundManager.Instance.PlaySfx(SoundManager.SFX.Menu);
+
+        SoundManager.Instance.PlayBgm(SoundManager.BGM.Game, true); // BGM 처음부터 다시 시작
+
         GameUIManager.Instance.SetPauseState(false);
 
         SceneManager.LoadScene("GameScene");
@@ -43,6 +49,8 @@ public class PauseMenu : MonoBehaviour
     // 이어하기 버튼 클릭
     void ClickContinueButton()
     {
+        SoundManager.Instance.PlaySfx(SoundManager.SFX.Menu);
+
         GameUIManager.Instance.SetPauseState(false);
     }
 }
