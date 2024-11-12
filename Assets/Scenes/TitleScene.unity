@@ -1869,7 +1869,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "- \uB098\uC758 \uBFC5\uB9DD\uCE58 \uB108\uC758 \uB0C4\uBE44 - "
+  m_text: "- \uB098\uC758 \uBFC5\uB9DD\uCE58, \uB108\uC758 \uB0C4\uBE44 - "
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: af7ee40654f9e754fbcd5b2efab0ebcf, type: 2}
   m_sharedMaterial: {fileID: 2667756597705065026, guid: af7ee40654f9e754fbcd5b2efab0ebcf, type: 2}
@@ -3349,6 +3349,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6723280314985753501, guid: fa400250a28a1f84fa5c60ed3aeccd3c, type: 3}
+      propertyPath: gameBgm
+      value: 
+      objectReference: {fileID: 8300000, guid: 4311d78302b8eae4289c0090fa4a0a23, type: 3}
+    - target: {fileID: 6723280314985753501, guid: fa400250a28a1f84fa5c60ed3aeccd3c, type: 3}
+      propertyPath: titleBgm
+      value: 
+      objectReference: {fileID: 8300000, guid: aa0019b09db53e945a36e8f1f5f28c65, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

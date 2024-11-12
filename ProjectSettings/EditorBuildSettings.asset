@@ -14,4 +14,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/RecordScene.unity
     guid: 0f8a4786879ffd245a1239a8b7894684
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 25ecb9a8585530c418f31dca0505460f, type: 2}
+    com.unity.localization.settings: {fileID: 11400000, guid: 1b90a84a0a27ad54393a64a78a70d680, type: 2}

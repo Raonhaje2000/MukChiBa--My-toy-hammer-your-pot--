@@ -47,7 +47,7 @@ public class JsonManager : MonoBehaviour
     {
         saveData = new GameSaveData();
 
-        directoryPath = Path.Combine(Application.dataPath, Game_Data_Directory_Name);
+        directoryPath = Path.Combine(Application.persistentDataPath, Game_Data_Directory_Name); // persistentDataPath는 앱 실행되어도 유지 dataPath는 앱 실행시 초기화
 
         // 디렉토리가 없는 경우 디렉토리 생성
         if (!Directory.Exists(directoryPath)) Directory.CreateDirectory(directoryPath);
@@ -84,8 +84,18 @@ public class JsonManager : MonoBehaviour
     {
         saveData = new GameSaveData();
 
+        // ResetMessageBox.cs의 ClickYesButton()에서 해당 처리부분을 기다리는 동안 아래있는 코드 실행이 안되는 버그가 있음
+        // -> 해당 함수는 saveData의 내용만 가져오므로 파일 초기화 처리부분만 코루틴으로 돌림
+        StartCoroutine(ResetFile());
+    }
+
+    // 파일 내용 리셋
+    IEnumerator ResetFile()
+    {
         // 클래스를 Json으로 변환
         string jsonData = JsonUtility.ToJson(saveData, true);
         File.WriteAllText(filePath, jsonData);
+
+        yield break;
     }
 }
