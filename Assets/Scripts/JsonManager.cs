@@ -10,7 +10,7 @@ public class JsonManager : MonoBehaviour
     static JsonManager instance;
 
     const string Game_Data_Directory_Name = "GameData"; // 저장 디렉토리 이름
-    const string Game_Data_File_Name = "ProjectM_Data"; // 저장 파일 이름
+    const string Game_Data_File_Name = "MukChiBa_Data"; // 저장 파일 이름
 
     string directoryPath; // 저장 디렉토리 경로
     string filePath; // 저장 파일 경로

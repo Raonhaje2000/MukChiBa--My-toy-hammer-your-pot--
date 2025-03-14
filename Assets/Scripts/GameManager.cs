@@ -157,12 +157,12 @@ public class GameManager : MonoBehaviour
             if (playerCurrentHp == 0) break;
 
             // 묵찌빠 진행
-            yield return DoMukChiBa();
+            if(playerSelection != MukChiBa.None) yield return DoMukChiBa();
 
             if (playerCurrentHp == 0) break;
 
             // 공격 방어 진행
-            yield return DoAttackDefence();
+            if (playerSelection != MukChiBa.None) yield return DoAttackDefence();
 
             if (playerCurrentHp == 0 || computerCurrentHp == 0) break;
         }
@@ -204,8 +204,10 @@ public class GameManager : MonoBehaviour
                 // 선택 이미지를 보여주는 동안 대기
                 yield return SelectionLatencyTime;
 
-                // 플레이어 체력이 0이 되었을 경우 가위바위보 종료
-                if (playerCurrentHp == 0) break;
+                // 플레이 데이터 업데이트
+                playData.UpdateNone(count);
+
+                break;
             }
             else // 플레이어가 선택을 한 경우
             {
@@ -232,10 +234,15 @@ public class GameManager : MonoBehaviour
                     // 묵찌빠 진행
                     break;
                 }
-            }
+                else
+                {
+                    // 플레이 데이터 업데이트
+                    playData.UpdateDraw();
 
-            // 다음 판으로 넘어간게 아니므로 판수 롤백
-            count--;
+                    // 다음 판(묵찌빠)으로 넘어간게 아니므로 판수 롤백
+                    count--;
+                }
+            }
         }
     }
 
@@ -271,8 +278,10 @@ public class GameManager : MonoBehaviour
                 // 선택 이미지를 보여주는 동안 대기
                 yield return SelectionLatencyTime;
 
-                // 플레이어 체력이 0이 되었을 경우 가위바위보 종료
-                if (playerCurrentHp == 0) break;
+                // 플레이 데이터 업데이트
+                playData.UpdateNone(count);
+
+                break;
             }
             else // 플레이어가 선택을 한 경우
             {
@@ -376,7 +385,7 @@ public class GameManager : MonoBehaviour
         if(computerCurrentHp == 0) // 플레이어가 이긴 경우
         {
             GameUIManager.Instance.ChanageCharacterImage(Character.State.Win);
-            GameUIManager.Instance.SetResultText(true, "You Win!");
+            GameUIManager.Instance.SetResultText(true, "당신이 이겼습니다!");
 
             // 플레이 데이터 업데이트
             playData.UpdateEnd(GamePlayData.Result.Win, playTime);
@@ -384,7 +393,7 @@ public class GameManager : MonoBehaviour
         else
         {
             GameUIManager.Instance.ChanageCharacterImage(Character.State.Lose);
-            GameUIManager.Instance.SetResultText(true, "You Lose.");
+            GameUIManager.Instance.SetResultText(true, "당신이 졌습니다.");
 
             // 플레이 데이터 업데이트
             playData.UpdateEnd(GamePlayData.Result.Lose, playTime);

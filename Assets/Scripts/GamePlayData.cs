@@ -46,19 +46,31 @@ public class GamePlayData
         attackPercentage = 0.0f;
     }
 
+    // 가위바위보 할 때 플레이어가 비기면 업데이트
+    public void UpdateDraw()
+    {
+        this.playTotalCount++;
+    }
+
     // 가위바위보+묵찌빠 할 때 이기면 업데이트
     public void UpdateWin()
     {
         this.winCount++;
     }
 
-    // 공격 방어가 끝나면 업데이트
-    public void UpdateAtkDef(bool atkPossible, int playTotalCount)
+    // 가위바위보+묵찌빠 할 때 플레이어가 아무것도 선택하지 않았으면 업데이트
+    public void UpdateNone(int count = 1)
     {
-        atkDefCount++;
-        if(atkPossible) atkPossibleCount++;
+        this.playTotalCount += count;
+    }
 
-        this.playTotalCount += playTotalCount;
+    // 공격 방어가 끝나면 업데이트
+    public void UpdateAtkDef(bool atkPossible, int count)
+    {
+        this.atkDefCount++;
+        if(atkPossible) this.atkPossibleCount++;
+
+        this.playTotalCount += count;
     }
 
     // 게임이 종료되면 업데이트
@@ -67,9 +79,9 @@ public class GamePlayData
         this.playResult = (int)result;
         this.playTime = playTime;
 
-        // 플레이어가 게임 진행동안 아무것도 내지않아 게임이 종료된 경우 0으로 처리
-        winningPercentage = (playTotalCount == 0) ? 0.0f : (float)winCount / (float)playTotalCount * 100.0f;
+        // 플레이어가 게임 진행동안 아무것도 내지않아 공격 방어 없이 게임이 종료된 경우 0으로 처리
         attackPercentage = (atkDefCount == 0) ? 0.0f : (float)atkPossibleCount / (float)atkDefCount * 100.0f;
+        winningPercentage = (winCount == 0) ? 0.0f : (float)winCount / (float)playTotalCount * 100.0f;
     }
 
     // 값 반환 (해당 함수값을 통해 탐색 함수 하나만 구현하기 위함)

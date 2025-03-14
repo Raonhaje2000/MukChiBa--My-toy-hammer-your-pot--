@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9bcc58f59d67bd47817e8d5635e39e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  titleBgm: {fileID: 8300000, guid: be0b26fe313a1dd43b3c313ad10ec6ad, type: 3}
-  gameBgm: {fileID: 8300000, guid: 4311d78302b8eae4289c0090fa4a0a23, type: 3}
+  titleBgm: {fileID: 8300000, guid: b4cde2533a96bf145aa448b773be048f, type: 3}
+  gameBgm: {fileID: 8300000, guid: 5ff50d5ea9992d044b91e6e7e85b8f5b, type: 3}
   menuButtonSfx: {fileID: 8300000, guid: e1d81132c2b9ef440bc9d52f376d4c45, type: 3}
   gameButtonSfx: {fileID: 8300000, guid: 98d27ffe1670b99469d0a70bb1a0f1c9, type: 3}

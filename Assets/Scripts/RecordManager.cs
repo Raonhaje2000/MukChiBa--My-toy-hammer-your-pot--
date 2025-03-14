@@ -172,13 +172,9 @@ public class RecordManager : MonoBehaviour
         {
             // 인덱스는 0부터 시작이므로 +1을 해줌
             if (i < gameData.Count)
-            {
                 recordElementList[i].SetRecordElement(gameData[i], i + 1);
-            }
             else
-            {
                 recordElementList[i].SetRecordElement(null, i + 1);
-            }
         }
     }
 }

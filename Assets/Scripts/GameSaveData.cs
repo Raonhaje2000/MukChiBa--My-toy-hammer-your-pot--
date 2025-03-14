@@ -11,8 +11,8 @@ public class GameSaveData
     [SerializeField] int saveCount;                        // 저장된 횟수
 
     // 저장된 게임 데이터들
-    [SerializeField] List<GamePlayData> timeLongSort;      // 가장 오래 버틴 시간 정렬
     [SerializeField] List<GamePlayData> timeShortSort;     // 가장 적게 버틴 시간 정렬
+    [SerializeField] List<GamePlayData> timeLongSort;      // 가장 오래 버틴 시간 정렬
     [SerializeField] List<GamePlayData> winPercentSort;    // 승률 높은 순으로 정렬
     [SerializeField] List<GamePlayData> attackPercentSort; // 공격 확률 높은 순으로 정렬
 
@@ -26,14 +26,14 @@ public class GameSaveData
         get { return saveCount; }
     }
 
-    public List<GamePlayData> TimeLongSort
-    { 
-        get { return timeLongSort; }
-    }
-
     public List<GamePlayData> TimeShortSort
     {
         get { return timeShortSort; }
+    }
+
+    public List<GamePlayData> TimeLongSort
+    { 
+        get { return timeLongSort; }
     }
 
     public List<GamePlayData> WinPercentSort
@@ -50,8 +50,8 @@ public class GameSaveData
     {
         saveCount = 0;
 
-        timeLongSort = new List<GamePlayData>();
         timeShortSort = new List<GamePlayData>();
+        timeLongSort = new List<GamePlayData>();
         winPercentSort = new List<GamePlayData>();
         attackPercentSort = new List<GamePlayData>();
     }
@@ -63,8 +63,8 @@ public class GameSaveData
         saveCount++;
 
         // 정렬된 데이터 저장
-        SaveSortedData(data, GamePlayData.VariableName.Time, timeLongSort, false);        // 가장 오래 버틴 시간 순으로 정렬
         SaveSortedData(data, GamePlayData.VariableName.Time, timeShortSort, true);        // 가장 적게 버틴 시간 순으로 정렬
+        SaveSortedData(data, GamePlayData.VariableName.Time, timeLongSort, false);        // 가장 오래 버틴 시간 순으로 정렬
         SaveSortedData(data, GamePlayData.VariableName.WinPer, winPercentSort, false);    // 승률 높은 순으로 정렬
         SaveSortedData(data, GamePlayData.VariableName.atkPer, attackPercentSort, false); // 공격 확률 높은 순으로 정렬
     }
@@ -91,30 +91,27 @@ public class GameSaveData
     {
         float searchValue = data.ReturnVariableValue(variable); // 찾으려는 값
 
-        int leftIndex = 0;               // 가장 왼쪽 값의 인덱스
-        int rightIndex = list.Count - 1; // 가장 오른쪽 값의 인덱스
+        int startIndex = 0;               // 시작 인덱스
+        int endIndex = list.Count - 1;    // 끝 인덱스
 
-        if (searchValue < list[leftIndex].ReturnVariableValue(variable)) // 최솟값보다 더 작은 경우
+        if (searchValue < list[startIndex].ReturnVariableValue(variable)) // 최솟값보다 더 작은 경우
         {
             return 0;
         }
-        else if (searchValue > list[rightIndex].ReturnVariableValue(variable)) // 최댓값보다 더 큰 경우
+        else if (searchValue > list[endIndex].ReturnVariableValue(variable)) // 최댓값보다 더 큰 경우
         {
-            return list.Count;
+            return list.Count; // 끝 인덱스 뒤에 삽입 해야 하므로
         }
-        else // 사이값인 경우 (이진 탐색 응용)
+        else // 사이값인 경우
         {
-            while (leftIndex < rightIndex)
-            {
-                int midIndex = (rightIndex + leftIndex) / 2;
+            int index = -1;
 
-                if (searchValue > list[midIndex].ReturnVariableValue(variable))
-                    leftIndex = midIndex + 1;
-                else
-                    rightIndex = midIndex - 1;
+            for(index = startIndex + 1; index < endIndex ; index++)
+            {
+                if (searchValue <= list[index].ReturnVariableValue(variable)) break;
             }
 
-            return rightIndex;
+            return index;
         }
     }
 
@@ -123,30 +120,27 @@ public class GameSaveData
     {
         float searchValue = data.ReturnVariableValue(variable); // 찾으려는 값
 
-        int leftIndex = 0;               // 가장 왼쪽 값의 인덱스
-        int rightIndex = list.Count - 1; // 가장 오른쪽 값의 인덱스
+        int startIndex = 0;            // 시작 인덱스
+        int endIndex = list.Count - 1; // 끝 인덱스
 
-        if (searchValue > list[leftIndex].ReturnVariableValue(variable)) // 최댓값보다 더 큰 경우
+        if (searchValue > list[startIndex].ReturnVariableValue(variable)) // 최댓값보다 더 큰 경우
         {
             return 0;
         }
-        else if (searchValue < list[rightIndex].ReturnVariableValue(variable)) // 최솟값보다 더 작은 경우
+        else if (searchValue < list[endIndex].ReturnVariableValue(variable)) // 최솟값보다 더 작은 경우
         {
             return list.Count;
         }
-        else // 사이값인 경우 (이진 탐색 응용)
+        else // 사이값인 경우
         {
-            while (leftIndex < rightIndex)
-            {
-                int midIndex = (rightIndex + leftIndex) / 2;
+            int index = -1;
 
-                if (searchValue < list[midIndex].ReturnVariableValue(variable))
-                    leftIndex = midIndex + 1;
-                else
-                    rightIndex = midIndex - 1;
+            for (index = startIndex + 1; index < endIndex; index++)
+            {
+                if (searchValue >= list[index].ReturnVariableValue(variable)) break;
             }
 
-            return leftIndex;
+            return index;
         }
     }
 
